@@ -4,23 +4,21 @@ name: CI
 on:
   push:
     branches:
-      - master # 这里只配置了master分支，所以只有推送master分支才会触发以下任务
+      - master          # 这里只配置了master分支，所以只有推送master分支才会触发以下任务
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest                  #虚拟机使用linux系统
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js
+      - uses: actions/checkout@v3           # 将项目checkout到虚拟机
+      - name: Use Node.js                   # 在虚拟机中安装Node
         uses: actions/setup-node@v3
         with:
           node-version: "14.x"
-          # 这个为使用 JamesIves/github-pages-deploy-action脚本所需要的配置
-          persist-credentials: false
-      - run: node -v
-      - run: npm install
-      - run: npm run build
-      - name: Deploy # 部署
+      - run: node -v                        # 查看node版本
+      - run: npm install                    # 安装项目中package.json指定的依赖包
+      - run: npm run build                  # 运行package.json->scripts中的build脚本
+      - name: Deploy                        # 部署
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: ./dist # 这里填打包好的目录名称
+          publish_dir: ./dist               # 这里填打包好的目录名称
           github_token: ${{ secrets.ACCESS_TOKEN }}
